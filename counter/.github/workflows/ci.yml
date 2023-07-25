@@ -1,0 +1,32 @@
+name: Rust
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: install cairo
+      run:  curl -L https://github.com/franalgaba/cairo-installer/raw/main/bin/cairo-installer | bash 
+    - name: set env 
+      run: |
+          echo 'export CAIRO_ROOT="$HOME/.cairo"' >> ~/.bashrc,
+          echo 'command -v cairo-compile >/dev/null || export PATH="$CAIRO_ROOT/target/release:$PATH"' >> ~/.bashrc,
+    - name: install scarb
+      run: curl --proto '=https' --tlsv1.2 -sSf https://docs.swmansion.com/scarb/install.sh | sh
+    - name: build  app
+      run: scarb build && cairo-run -s  src/lib.cairo
+    - name: run app
+      run: scarb run app
+ 
