@@ -3,8 +3,8 @@ mod HelloStarknet {
     struct Storage {
         balance: felt252,
     }
-    fn print (print:felt){
-        
+    fn Message (msg:felt252){
+        msg
     }
     // Increases the balance by the given amount.
     #[external]
